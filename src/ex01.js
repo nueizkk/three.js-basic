@@ -8,8 +8,9 @@ export default function render() {
   /**
    * Renderer
    */
-  const renderer = new THREE.WebGLRenderer({ canvas });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 
   /**
    * Scene
@@ -46,4 +47,18 @@ export default function render() {
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
   renderer.render(scene, camera);
+
+  /**
+   * resize
+   */
+  function setResize() {
+    // camera 종횡비 재설정
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    // renderer 재설정
+    renderer.setSize(window.innerWidth, winodw.innerHeight);
+    renderer.render(scene, camera);
+    // renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+  }
+  window.addEventListener("resize", setResize);
 }
